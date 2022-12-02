@@ -1,29 +1,16 @@
 import { readFileSync } from 'fs';
 
 const getElfCalories = (inputfile : string): number[] => {
-    const filecontents = readFileSync(inputfile, 'utf-8');
-    var textByLine = filecontents.split("\n")
-    let totalcals: number = 0;
-    let elfcals: number[] = []
-    
-    textByLine.forEach((line) => {    
-        if (!line.trim()){
-            elfcals.push(totalcals);
-            totalcals = 0;
-        }
-        var calories: number = +line;
-        totalcals += calories;
-    })
-    if (totalcals) {
-        elfcals.push(totalcals)
-    }
-    return elfcals;
+    return readFileSync(inputfile, 'utf-8')
+        .split("\n")
+        .reduce(([head,...tail], line) => 
+            line.trim() 
+                ? [head += +line, ...tail] 
+                : [0, head, ...tail], [0])
   };
 
 const getTop3 = (elfcalories : number[]) : number[] => {
-    const sorted: number[] = [...elfcalories].sort((a, b) => a - b).reverse()
-    console.log(sorted);
-    return sorted.slice(0, 3)
+    return [...elfcalories].sort((a, b) => a - b).reverse().slice(0, 3)
 }
 
 console.log(`AOC 2022 Day 1 result ⭐: ${ Math.max(...getElfCalories('src/day1/input.txt'))}`);
