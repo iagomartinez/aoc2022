@@ -8,7 +8,6 @@ const getElfCalories = (inputfile : string): number[] => {
     
     textByLine.forEach((line) => {    
         if (!line.trim()){
-            console.log(`${totalcals}`);
             elfcals.push(totalcals);
             totalcals = 0;
         }
@@ -18,9 +17,14 @@ const getElfCalories = (inputfile : string): number[] => {
     if (totalcals) {
         elfcals.push(totalcals)
     }
-    console.log(elfcals);
     return elfcals;
   };
 
-//console.log(`AOC 2022 Day 1 test input: ${ Math.max(...getElfCalories('src/day1/testinput.txt'))}`);
+const getTop3 = (elfcalories : number[]) : number[] => {
+    const sorted: number[] = [...elfcalories].sort((a, b) => a - b).reverse()
+    console.log(sorted);
+    return sorted.slice(0, 3)
+}
+
 console.log(`AOC 2022 Day 1 result ⭐: ${ Math.max(...getElfCalories('src/day1/input.txt'))}`);
+console.log(`AOC 2022 Day 1 result ⭐⭐: ${ getTop3([...getElfCalories('src/day1/input.txt')]).reduce((sum, current) => sum + current, 0)}`);
