@@ -7,21 +7,19 @@ const scores = new Map<string, number>([
 ]);
 
 function scoreMove(move:string|undefined): number{
-    let s = move ? scores.get(move) : 0;
+    const s = move ? scores.get(move) : 0;
     return s ? s : 0;
 }
 
 export function scoreP1(play:string, response:string): [number, number]{
-    let score : [number, number]= [0,0]
+    const score : [number, number]= [0,0]
 
-    let playMap = new Map<string, string>([
+    const playMap = new Map<string, string>([
         ['X', 'A'],
         ['Y', 'B'],
         ['Z', 'C']
     ]);    
-
-    let mappedResponse:string|undefined = playMap.get(response);
-
+    const mappedResponse:string|undefined = playMap.get(response);
     score[0] = mappedResponse ? scoreMove(mappedResponse) : 0;
 
     if (play === mappedResponse){
@@ -38,13 +36,13 @@ export function scoreP1(play:string, response:string): [number, number]{
 }
 
 export function scoreP2(play:string, response:string): [number, number]{
-    let win = new Map<string, string>([
+    const win = new Map<string, string>([
         ['A', 'B'],
         ['B', 'C'],
         ['C', 'A']
     ]);
 
-    let lose = new Map<string, string>([
+    const lose = new Map<string, string>([
         ['A', 'C'],
         ['B', 'A'],
         ['C', 'B']
@@ -60,7 +58,7 @@ export function scoreP2(play:string, response:string): [number, number]{
         default:
             return [0,0]
         }
-};
+}
 
 export function parseinput(inputfile : string): string[][] {
     return readFileSync(inputfile, 'utf-8')
@@ -70,8 +68,7 @@ export function parseinput(inputfile : string): string[][] {
 }
 
 function calculate (inputfile : string, scoreFn : (play: string, response: string) => [number,number]): number[] {
-    let parsed = parseinput(inputfile);
-    return parsed
+    return parseinput(inputfile)
         .map(move => scoreFn(move[0], move[1]))
         .map(score => score[0]+score[1]);
 }

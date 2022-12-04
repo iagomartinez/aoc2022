@@ -17,23 +17,17 @@ describe('Day 2 score function', () => {
         });
 
     it ('should parse three rows from test input', () => {
-        let parsed = parseinput('src/day2/testinput.txt');
-        console.log(parsed);
-        expect(parsed).toStrictEqual([['A','Y'],['B','X'],['C','Z']])
+        expect(parseinput('src/day2/testinput.txt')).toStrictEqual([['A','Y'],['B','X'],['C','Z']])
     });
 
     it('should work out a score of 15 with test input', () =>{
-        let scores = p1('src/day2/testinput.txt');
-        console.log(scores);
-        expect(scores).toStrictEqual([8,1,6]);
+        expect(p1('src/day2/testinput.txt')).toStrictEqual([8,1,6]);
     });
 });
 
 describe('Day 2 part 2 score function', () => {
     it ('should work out a score of 12 with test input', () =>{
-        let scores = p2('src/day2/testinput.txt');
-        console.log(scores);
-        expect(scores).toStrictEqual([4, 1, 7]);
+        expect(p2('src/day2/testinput.txt')).toStrictEqual([4, 1, 7]);
     });
 
 });

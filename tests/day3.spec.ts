@@ -4,15 +4,15 @@ const sampleContents = 'vJrwpWtwJgWrhcsFMMfFFhFp';
 
 describe('Day 3 splitContents', () => {
     it('should split the string in two equal parts', () => {
-        let [h1,h2] = splitContents(sampleContents);
+        const [h1,h2] = splitContents(sampleContents);
         expect(h1.length).toEqual(h2.length);
     });
 });
 
 describe('Day 3 findInBoth', () => {
     it('should find the single common item in sample', () => {
-        let [h1,h2] = splitContents(sampleContents);
-        let commonItems = findInBoth(h1,h2);
+        const [h1,h2] = splitContents(sampleContents);
+        const commonItems = findInBoth(h1,h2);
         expect(commonItems).toStrictEqual(['p']);
     });
 });
@@ -25,14 +25,12 @@ describe('Day 3 prioritise', () => {
 
 describe('Day 3 part 1', () => {
     it('should find the single common item in each rucksack', () => {
-        let repeatedItems = part1('src/day3/testinput.txt');
-        expect(repeatedItems).toStrictEqual([['p', 16], ['L', 38], ['P', 42],['v', 22], ['t', 20],['s', 19]]);
+        expect(part1('src/day3/testinput.txt')).toStrictEqual([['p', 16], ['L', 38], ['P', 42],['v', 22], ['t', 20],['s', 19]]);
     });
 });
 
 describe('Groups of 3 function', () => {
     it('should result in 100 groups for input file', () => {
-        let groups = groupsof3('src/day3/input.txt');
-        expect(groups.length).toEqual(100);
+        expect(groupsof3('src/day3/input.txt').length).toEqual(100);
     });
 });
