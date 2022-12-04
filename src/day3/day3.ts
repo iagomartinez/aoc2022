@@ -38,11 +38,7 @@ export function groupsof3(inputfile: string): string[][]{
 }
 
 function findInGroup(group:string[]): string[]{
-    let matchgroup = [...group[0]];
-    for (let i = 1; i < group.length; i++) {
-        matchgroup = [...matchgroup].filter(item => new Set([...group[i]]).has(item))
-    }
-    return [...new Set(matchgroup)];
+    return [...group.reduce((matchgroup, next)=> matchgroup = [...matchgroup].filter(item => new Set([...next]).has(item)), [...group[0]])]
 }
 
 export function part2(inputfile: string): [string,number][]{
