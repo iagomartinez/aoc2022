@@ -1,4 +1,4 @@
-import {splitContents, findInBoth, prioritise, part1} from '../src/day3/day3';
+import {splitContents, findInBoth, prioritise, part1, groupsof3} from '../src/day3/day3';
 
 const sampleContents = 'vJrwpWtwJgWrhcsFMMfFFhFp';
 
@@ -24,8 +24,15 @@ describe('Day 3 prioritise', () => {
 });
 
 describe('Day 3 part 1', () => {
-    it ('should find the single common item in each rucksack', () => {
+    it('should find the single common item in each rucksack', () => {
         let repeatedItems = part1('src/day3/testinput.txt');
         expect(repeatedItems).toStrictEqual([['p', 16], ['L', 38], ['P', 42],['v', 22], ['t', 20],['s', 19]]);
+    });
+});
+
+describe('Groups of 3 function', () => {
+    it('should result in 100 groups for input file', () => {
+        let groups = groupsof3('src/day3/input.txt');
+        expect(groups.length).toEqual(100);
     });
 });
