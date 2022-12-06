@@ -39,9 +39,13 @@ describe("Day 5 part 1", () => {
   });
 
   describe("rearrange function", () => {
-    it("returns stack object", () => {
+    it("has the correct answer for test input", () => {
       const stack = rearrange("tests/day5/testinput.txt");
-      expect(stack).toBeTruthy();
+      expect([...stack.get()]).toStrictEqual([
+        ["C"],
+        ["M"],
+        ["Z", "N", "D", "P"],
+      ]);
     });
   });
 
@@ -50,10 +54,13 @@ describe("Day 5 part 1", () => {
       const stack = new Stack();
       const lines = ["    [D]    ", "[N] [C]    ", "[Z] [M] [P]"];
       lines.map((line) => parseLine(line)).forEach((line) => stack.build(line));
-      const move = parseMove("move 1 from 2 to 1");
+      let move = parseMove("move 1 from 2 to 1");
+      stack.move(move.move, move.from, move.to);
+      move = parseMove("move 3 from 1 to 3");
       stack.move(move.move, move.from, move.to);
       const stacks = [...stack.stacks];
-      expect(stacks[0]).toStrictEqual(["D", "N", "Z"]);
+      expect(stacks[0]).toStrictEqual([]);
+      expect(stacks[2]).toStrictEqual(["Z", "N", "D", "P"]);
     });
   });
 });

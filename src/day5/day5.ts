@@ -21,7 +21,14 @@ export class Stack {
     });
   }
   move(crates: number, from: number, to: number) {
-    throw "not implemented";
+    for (let i = 1; i <= crates; i++) {
+      const item = this.stacks[from - 1].shift();
+      if (item) {
+        this.stacks[to - 1].unshift(item);
+      } else {
+        throw `not enough crates to move from ${from} to ${to}!`;
+      }
+    }
   }
   get() {
     return this.stacks;
@@ -63,8 +70,8 @@ export function rearrange(inputfile: string): Stack {
       } else if (line.match(crateregex)) {
         stacks.build(parseLine(line));
       } else if (line.match(moveregex)) {
-        const groups = parseMove(line);
-        //console.log(`move ${groups.move}`);
+        const move = parseMove(line);
+        stacks.move(move.move, move.from, move.to);
       }
     }
   }
