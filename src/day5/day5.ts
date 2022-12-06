@@ -78,3 +78,8 @@ export function rearrange(inputfile: string): Stack {
 
   return stacks;
 }
+
+console.log(
+    `AOC 2022 Day 5 result ⭐: ${rearrange("src/day5/input.txt").get().reduce((acc, stack)=> acc+=(stack[0] ? stack[0]:'-ERROR-'), '')}`
+  );
+  

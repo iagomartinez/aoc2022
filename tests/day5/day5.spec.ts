@@ -11,14 +11,6 @@ describe("Day 5 part 1", () => {
       expect(parseLine(line)).toStrictEqual(stacks);
     });
 
-    // it("builds stacks", () => {
-    //   expect(buildStacks("tests/day5/testinput.txt")).toStrictEqual([
-    //     ["N", "Z"],
-    //     ["D", "C", "M"],
-    //     ["P"],
-    //   ]);
-    // });
-
     it("can identify the last line with regex", () => {
       const regex = /\d{1,}\s/g;
       expect("    [D]    ".match(regex)).toBeNull();
