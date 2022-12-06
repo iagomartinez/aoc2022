@@ -11,11 +11,9 @@ export class Stack {
   build(row: (string | null)[]) {
     row.forEach((elem, i) => {
       if (this.stacks[i] === undefined) {
-        console.log(`adding new stack ${i}`);
         this.stacks.push([]);
       }
       if (elem) {
-        console.log(`adding new ${elem} to stack ${i}`);
         this.stacks[i].push(elem);
       }
     });
@@ -30,8 +28,25 @@ export class Stack {
       }
     }
   }
+
   get() {
     return this.stacks;
+  }
+}
+
+class CrateMover9001 extends Stack {
+  move(count: number, from: number, to: number) {
+    const crates: (string | null)[] = [];
+    for (let i = 1; i <= count; i++) {
+      const item = this.stacks[from - 1].shift();
+      if (item) {
+        crates.push(item);
+      } else {
+        throw `not enough crates to move from ${from} to ${to}!`;
+      }
+    }
+    crates.push(...this.stacks[to - 1]);
+    this.stacks[to - 1] = crates;
   }
 }
 
@@ -46,20 +61,30 @@ export function parseLine(line: string): (string | null)[] {
   const stacks: (string | null)[] = [];
   while (x < line.length) {
     const s = line.slice(x, x + 3).trim();
-    console.log(`s: ${s}, x:${x}`);
     s ? stacks.push(s[1]) : stacks.push(null);
     x += 4;
   }
   return stacks;
 }
 
-export function rearrange(inputfile: string): Stack {
+export function mover9000() {
+  return new Stack();
+}
+
+export function mover9001() {
+  return new CrateMover9001();
+}
+
+export function rearrange(
+  cranefunction: () => Stack,
+  inputfile: string
+): Stack {
   const lines = readFileSync(inputfile, "utf-8").split(/\r?\n/);
   const countsregex = /$\d{1,}\s/g;
   const crateregex = /\[[A-Z]/g;
   const moveregex = /move\s\d{1,}\sfrom\s\d{1,}\sto\s\d{1,}/;
 
-  const stacks = new Stack();
+  const stacks = cranefunction();
   const linecount = lines.length;
   for (let i = 0; i < linecount; i++) {
     const line = lines.shift();
@@ -80,6 +105,13 @@ export function rearrange(inputfile: string): Stack {
 }
 
 console.log(
-    `AOC 2022 Day 5 result ⭐: ${rearrange("src/day5/input.txt").get().reduce((acc, stack)=> acc+=(stack[0] ? stack[0]:'-ERROR-'), '')}`
-  );
-  
+  `AOC 2022 Day 5 result ⭐: ${rearrange(mover9000, "src/day5/input.txt")
+    .get()
+    .reduce((acc, stack) => (acc += stack[0] ? stack[0] : "-ERROR-"), "")}`
+);
+
+console.log(
+  `AOC 2022 Day 5 result ⭐: ${rearrange(mover9001, "src/day5/input.txt")
+    .get()
+    .reduce((acc, stack) => (acc += stack[0] ? stack[0] : "-ERROR-"), "")}`
+);

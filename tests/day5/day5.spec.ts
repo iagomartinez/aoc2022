@@ -1,4 +1,11 @@
-import { parseLine, rearrange, parseMove, Stack } from "../../src/day5/day5";
+import {
+  parseLine,
+  rearrange,
+  parseMove,
+  Stack,
+  mover9000,
+  mover9001,
+} from "../../src/day5/day5";
 
 describe("Day 5 part 1", () => {
   describe("container parsing", () => {
@@ -31,12 +38,21 @@ describe("Day 5 part 1", () => {
   });
 
   describe("rearrange function", () => {
-    it("has the correct answer for test input", () => {
-      const stack = rearrange("tests/day5/testinput.txt");
+    it("has the correct answer for test input using CrateMover9000", () => {
+      const stack = rearrange(mover9000, "tests/day5/testinput.txt");
       expect([...stack.get()]).toStrictEqual([
         ["C"],
         ["M"],
         ["Z", "N", "D", "P"],
+      ]);
+    });
+
+    it("has the correct answer for test input using CrateMover9001", () => {
+      const stack = rearrange(mover9001, "tests/day5/testinput.txt");
+      expect([...stack.get()]).toStrictEqual([
+        ["M"],
+        ["C"],
+        ["D", "N", "Z", "P"],
       ]);
     });
   });
