@@ -10,8 +10,7 @@
 //  cd: moves pointer
 //  ls: creates folder structure; populates folder lookup
 
-import { part1, CommandParser } from "../../src/day7/day7";
-import { readFileSync } from "fs";
+import { part1, part2 } from "../../src/day7/day7";
 
 describe("command parsing", () => {
   it("can extract cd", () => {
@@ -27,17 +26,12 @@ describe("command parsing", () => {
     expect(input.match(ls)).toBeTruthy();
   });
 
-  describe("p1 function", () => {
+  describe("part1 function", () => {
     expect(part1("tests/day7/testinput.txt")).toEqual(95437);
   });
 
-  describe("CommandParser", () => {
-    const parser = new CommandParser();
-    readFileSync("tests/day7/testinput.txt", "utf-8")
-      .split(/\r?\n/)
-      .forEach((line) => parser.parse(line));
-
-    console.log(parser.getFs().genealogy);
+  describe("part2 function", () => {
+    expect(part2("tests/day7/testinput.txt")).toEqual(24933642);
   });
 
   describe("match file and size", () => {

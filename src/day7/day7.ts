@@ -47,9 +47,10 @@ export class FS {
         (acc, f) =>
           "file" in f
             ? (acc += f.size)
-            : (acc += f.size
-                ? f.size
-                : (f.size = this.calculateInner(`${directory}/${f.dir}`))),
+            : (acc +=
+                directory === "/"
+                  ? this.calculateInner(`${directory}${f.dir}`)
+                  : this.calculateInner(`${directory}/${f.dir}`)),
         0
       );
     return size ? size : 0;
@@ -81,20 +82,37 @@ export class CommandParser {
   }
 }
 
-export function part1(inputfile: string): number {
+export function buildFS(inputfile: string): FS {
   const parser = new CommandParser();
   readFileSync(inputfile, "utf-8")
     .split(/\r?\n/)
     .forEach((line) => parser.parse(line));
+  return parser.getFs();
+}
 
-  const fs = parser.getFs();
-  console.log(fs.directories);
-  console.log(fs.genealogy);
-
+export function part1(inputfile: string): number {
+  const fs = buildFS(inputfile);
   const sizes = fs.calculateSizes();
   return [...sizes.values()]
     .filter((val) => val <= 100000)
     .reduce((acc, val) => (acc += val), 0);
 }
 
+export function part2(inputfile: string): number {
+  const fs = buildFS(inputfile);
+  const sizes = fs.calculateSizes();
+  console.log(sizes);
+  console.log(fs.directories);
+  if (!sizes.has("/")) {
+    throw "could not find size of root";
+  }
+  const totalsize = fs.calculateInner("/");
+  const unused = 70000000 - totalsize;
+  console.log(`${totalsize}, ${unused}`);
+  return [...sizes.values()]
+    .filter((val) => val >= 30000000 - unused)
+    .sort((a, b) => a - b)[0];
+}
+
 console.log(`Day 7 ⭐: ${part1("src/day7/input.txt")}`);
+console.log(`Day 7 ⭐⭐: ${part2("src/day7/input.txt")}`);
