@@ -18,8 +18,10 @@ export class FS {
     if (target === "..") {
       this.cdUp();
     } else {
-      //this._pwd += `/${target}`;
-      const newpath = `${this._pwd}/${target}`;
+      const newpath =
+        target === "/"
+          ? `/`
+          : `${this._pwd === "/" ? "" : this._pwd}/${target}`;
       this.genealogy.set(newpath, this._pwd);
       this._pwd = newpath;
     }
@@ -95,5 +97,4 @@ export function part1(inputfile: string): number {
     .reduce((acc, val) => (acc += val), 0);
 }
 
-//  TODO: Implement cd ..!!!
 console.log(`Day 7 ⭐: ${part1("src/day7/input.txt")}`);
