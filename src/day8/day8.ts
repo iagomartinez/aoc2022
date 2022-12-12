@@ -1,3 +1,4 @@
+import { scoreP1 } from "day2/day2";
 import { readInput } from "../utils";
 
 export interface Trees {
@@ -60,10 +61,64 @@ export function findVisible(trees: Trees): Visibility[][] {
   );
 }
 
+function notFound(val: number, alt: number) {
+  if (val === -1) {
+    return alt;
+  }
+  return val + 1;
+}
+
+export function scenicScore(trees: Trees): number[][] {
+  const height = trees.rows.length,
+    width = trees.rows[0].length;
+  return trees.rows.map((row, y) =>
+    row.map((tree, x) => {
+      if (x == 0 || y == 0 || x == width - 1 || y == height - 1) {
+        return 0;
+      } else {
+        let score = 1;
+        //  Left
+        score *= notFound(
+          trees.rows[y].slice(x + 1).findIndex((first) => first >= tree),
+          trees.rows[y].slice(x + 1).length
+        );
+        // Right
+        score *= notFound(
+          trees.rows[y]
+            .slice(0, x)
+            .reverse()
+            .findIndex((first) => first >= tree),
+          trees.rows[y].slice(0, x).length
+        );
+        // Bottom
+        score *= notFound(
+          trees.cols[x].slice(y + 1).findIndex((first) => first >= tree),
+          trees.cols[x].slice(y + 1).length
+        );
+        // Top
+        score *= notFound(
+          trees.cols[x]
+            .slice(0, y)
+            .reverse()
+            .findIndex((first) => first >= tree),
+          trees.cols[x].slice(0, y).length
+        );
+
+        return score;
+      }
+    })
+  );
+}
+
 function part1(inputfile: string): number {
   return findVisible(readTrees(inputfile))
     .flat()
     .filter((t) => t !== Visibility.None).length;
 }
 
+export function part2(inputfile: string): number {
+  return Math.max(...scenicScore(readTrees(inputfile)).flat());
+}
+
 console.log(`Day 8 ⭐: ${part1("src/day8/input.txt")}`);
+console.log(`Day 8 ⭐⭐: ${part2("src/day8/input.txt")}`);

@@ -1,4 +1,10 @@
-import { readTrees, findVisible, Visibility } from "../../src/day8/day8";
+import {
+  readTrees,
+  findVisible,
+  scenicScore,
+  Visibility,
+  part2,
+} from "../../src/day8/day8";
 
 describe("Tree scanning", () => {
   describe("part 1", () => {
@@ -50,6 +56,23 @@ describe("Tree scanning", () => {
           Visibility.Edge,
         ],
       ]);
+    });
+  });
+  describe("part 2", () => {
+    it("solves test input", () => {
+      const scores = scenicScore(readTrees("tests/day8/testinput.txt"));
+      console.log(scores);
+      expect(scores).toStrictEqual([
+        [0, 0, 0, 0, 0],
+        [0, 1, 4, 1, 0],
+        [0, 6, 1, 2, 0],
+        [0, 1, 8, 3, 0],
+        [0, 0, 0, 0, 0],
+      ]);
+    });
+
+    it("finds the highest scenic score", () => {
+      expect(part2("tests/day8/testinput.txt")).toEqual(8);
     });
   });
 });
