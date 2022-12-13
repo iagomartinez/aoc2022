@@ -1,3 +1,5 @@
+import { readInput } from "../utils";
+
 export interface Position {
   x: number;
   y: number;
@@ -12,7 +14,7 @@ export class Rope {
     this._visited.add(JSON.stringify(this.tail));
   }
 
-  get visited(): string[] {
+  get visited(): [number, number][] {
     return Array.from(this._visited).map((elem) => JSON.parse(elem));
   }
 
@@ -101,3 +103,11 @@ export function simulate(moves: string[]): Rope {
 
   return rope;
 }
+
+export function part1(inputfile: string): [number, number][] {
+  const rope = simulate(readInput(inputfile));
+  console.log(rope.visited);
+  return rope.visited;
+}
+
+console.log(`Day 9 ⭐: ${part1("src/day9/input.txt").length}`);

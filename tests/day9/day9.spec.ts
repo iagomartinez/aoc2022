@@ -1,4 +1,4 @@
-import { Rope, simulate, parseMove } from "../../src/day9/day9";
+import { Rope, simulate, parseMove, part1 } from "../../src/day9/day9";
 
 describe("input parsing", () => {
   it("splits out number of moves", () => {
@@ -32,6 +32,10 @@ describe("simulate", () => {
       expect(rope.tail).toStrictEqual(tail);
     }
   );
+
+  it("returns right answer for test input", () => {
+    expect(part1("tests/day9/testinput.txt").length).toEqual(13);
+  });
 });
 
 describe("rope bridge walking", () => {
