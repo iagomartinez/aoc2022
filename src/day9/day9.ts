@@ -1,20 +1,20 @@
 import { readInput } from "../utils";
 
-export interface Position {
+export interface KnotPosition {
   x: number;
   y: number;
 }
 
 export class Rope {
-  head: [number, number] = [0, 0];
-  tail: [number, number] = [0, 0];
+  head: KnotPosition = { x: 0, y: 0 };
+  tail: KnotPosition = { x: 0, y: 0 };
   _visited: Set<string> = new Set<string>();
 
   constructor() {
     this._visited.add(JSON.stringify(this.tail));
   }
 
-  get visited(): [number, number][] {
+  get visited(): KnotPosition[] {
     return Array.from(this._visited).map((elem) => JSON.parse(elem));
   }
 
@@ -27,28 +27,28 @@ export class Rope {
   }
 
   moveX(move: number): void {
-    this.head[0] += move;
-    const xdiff = this.head[0] - this.tail[0];
-    const ydiff = this.head[1] - this.tail[1];
+    this.head.x += move;
+    const xdiff = this.head.x - this.tail.x;
+    const ydiff = this.head.y - this.tail.y;
 
     if (Math.abs(xdiff) > 1) {
-      this.tail[0] += move;
+      this.tail.x += move;
       if (Math.abs(ydiff) > 0) {
-        this.tail[1] += ydiff / Math.abs(ydiff);
+        this.tail.y += ydiff / Math.abs(ydiff);
       }
       this._visited.add(JSON.stringify(this.tail));
     }
   }
 
   moveY(move: number): void {
-    this.head[1] += move;
-    const xdiff = this.head[0] - this.tail[0];
-    const ydiff = this.head[1] - this.tail[1];
+    this.head.y += move;
+    const xdiff = this.head.x - this.tail.x;
+    const ydiff = this.head.y - this.tail.y;
 
     if (Math.abs(ydiff) > 1) {
-      this.tail[1] += move;
+      this.tail.y += move;
       if (Math.abs(xdiff) > 0) {
-        this.tail[0] += xdiff / Math.abs(xdiff);
+        this.tail.x += xdiff / Math.abs(xdiff);
       }
       this._visited.add(JSON.stringify(this.tail));
     }
@@ -104,7 +104,7 @@ export function simulate(moves: string[]): Rope {
   return rope;
 }
 
-export function part1(inputfile: string): [number, number][] {
+export function part1(inputfile: string): KnotPosition[] {
   const rope = simulate(readInput(inputfile));
   console.log(rope.visited);
   return rope.visited;
