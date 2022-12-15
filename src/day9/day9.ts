@@ -5,13 +5,27 @@ export interface KnotPosition {
   y: number;
 }
 
+export function euclideandistance(p1: KnotPosition, p2: KnotPosition): number {
+  return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+}
+
 export class Rope {
-  head: KnotPosition = { x: 0, y: 0 };
-  tail: KnotPosition = { x: 0, y: 0 };
+  knots: KnotPosition[] = [];
   _visited: Set<string> = new Set<string>();
 
-  constructor() {
+  constructor(size = 2) {
+    for (let i = 0; i < size; i++) {
+      this.knots.push({ x: 0, y: 0 });
+    }
     this._visited.add(JSON.stringify(this.tail));
+  }
+
+  get head(): KnotPosition {
+    return this.knots[0];
+  }
+
+  get tail(): KnotPosition {
+    return this.knots.at(-1) ?? { x: 0, y: 0 };
   }
 
   get visited(): KnotPosition[] {
@@ -28,30 +42,26 @@ export class Rope {
 
   moveX(move: number): void {
     this.head.x += move;
-    const xdiff = this.head.x - this.tail.x;
-    const ydiff = this.head.y - this.tail.y;
-
-    if (Math.abs(xdiff) > 1) {
-      this.tail.x += move;
-      if (Math.abs(ydiff) > 0) {
-        this.tail.y += ydiff / Math.abs(ydiff);
-      }
-      this._visited.add(JSON.stringify(this.tail));
-    }
+    this.moveKnots();
   }
 
   moveY(move: number): void {
     this.head.y += move;
-    const xdiff = this.head.x - this.tail.x;
-    const ydiff = this.head.y - this.tail.y;
+    this.moveKnots();
+  }
 
-    if (Math.abs(ydiff) > 1) {
-      this.tail.y += move;
-      if (Math.abs(xdiff) > 0) {
-        this.tail.x += xdiff / Math.abs(xdiff);
+  moveKnots(): void {
+    for (let i = 1; i < this.knots.length; i++) {
+      const xdiff = this.knots[i - 1].x - this.knots[i].x;
+      const ydiff = this.knots[i - 1].y - this.knots[i].y;
+
+      if (euclideandistance(this.knots[i - 1], this.knots[i]) >= 2) {
+        this.knots[i].y += ydiff ? ydiff / Math.abs(ydiff) : 0;
+        this.knots[i].x += xdiff ? xdiff / Math.abs(xdiff) : 0;
       }
-      this._visited.add(JSON.stringify(this.tail));
     }
+
+    this._visited.add(JSON.stringify(this.tail));
   }
 
   moveUp(): void {
@@ -68,35 +78,35 @@ export function parseMove(input: string) {
   return movepattern.exec(input)?.groups;
 }
 
-export function simulate(moves: string[]): Rope {
-  const rope = new Rope();
+export function simulate(moves: string[], size = 2, verbose = false): Rope {
+  const rope = new Rope(size);
 
   moves.forEach((input) => {
     const move = parseMove(input);
+    let movefn: () => void;
     if (move) {
       switch (move.direction) {
         case "R":
-          for (let i = 0; i < +move.count; i++) {
-            rope.moveRight();
-          }
+          movefn = () => rope.moveRight();
           break;
         case "L":
-          for (let i = 0; i < +move.count; i++) {
-            rope.moveLeft();
-          }
+          movefn = () => rope.moveLeft();
           break;
         case "U":
-          for (let i = 0; i < +move.count; i++) {
-            rope.moveUp();
-          }
+          movefn = () => rope.moveUp();
           break;
         case "D":
-          for (let i = 0; i < +move.count; i++) {
-            rope.moveDown();
-          }
+          movefn = () => rope.moveDown();
           break;
         default:
           throw `unknown move ${+move.direction}`;
+      }
+
+      for (let i = 0; i < +move.count; i++) {
+        movefn();
+        if (verbose) {
+          console.log(rope.knots);
+        }
       }
     }
   });
@@ -110,4 +120,11 @@ export function part1(inputfile: string): KnotPosition[] {
   return rope.visited;
 }
 
+export function part2(inputfile: string, verbose = false): KnotPosition[] {
+  const rope = simulate(readInput(inputfile), 10, verbose);
+  console.log(rope.visited);
+  return rope.visited;
+}
+
 console.log(`Day 9 ⭐: ${part1("src/day9/input.txt").length}`);
+console.log(`Day 9 ⭐⭐: ${part2("src/day9/input.txt").length}`);

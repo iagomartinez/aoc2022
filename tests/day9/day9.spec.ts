@@ -1,4 +1,4 @@
-import { Rope, simulate, parseMove, part1 } from "../../src/day9/day9";
+import { Rope, simulate, parseMove, part1, part2 } from "../../src/day9/day9";
 
 describe("input parsing", () => {
   it("splits out number of moves", () => {
@@ -35,6 +35,14 @@ describe("simulate", () => {
 
   it("returns right answer for test input", () => {
     expect(part1("tests/day9/testinput.txt").length).toEqual(13);
+  });
+
+  it("returns the right answer for ten knots example", () => {
+    expect(part2("tests/day9/testinput.txt", true).length).toEqual(1);
+  });
+
+  it("returns the right answer for the larger test", () => {
+    expect(part2("tests/day9/largertest.txt", true).length).toEqual(36);
   });
 });
 
@@ -83,6 +91,19 @@ describe("rope bridge walking", () => {
       visited.add(JSON.stringify({ x: 0, y: 0 }));
       visited.add(JSON.stringify({ x: 0, y: 0 }));
       expect(Array.from(visited)).toHaveLength(1);
+    });
+  });
+
+  describe("euclidean distance", () => {
+    it("calculates a horizontal move", () => {
+      //√(x - a)² + (y - b)²
+      const p1 = { x: 2, y: 4 };
+      const p2 = { x: 4, y: 3 };
+
+      const distance = Math.sqrt(
+        Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2)
+      );
+      console.log(distance);
     });
   });
 });
