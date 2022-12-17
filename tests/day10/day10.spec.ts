@@ -21,7 +21,6 @@ function calculate(inputs: string[]): { cycles: number[]; X: number } {
     if (input !== "noop") {
       queue.push(parse(input));
       cycles.push(X);
-      //console.log(`${input} X: ${X}`);
     }
 
     cycles.push(X);
@@ -75,6 +74,19 @@ describe("signal strength", () => {
         .map((cycle) => [cycle, cycles[cycle - 1]])
         .reduce((acc, next) => (acc += next[0] * next[1]), 0);
       console.log(`Day 10 ⭐ ${total}`);
+    });
+
+    it("⭐⭐", () => {
+      const { cycles } = calculate(readInput("tests/day10/input.txt"));
+      let crt = "";
+      for (let pixel = 0; pixel < 240; pixel++) {
+        if (pixel > 0 && pixel % 40 === 0) {
+          crt += "\n";
+        }
+        const X = cycles[pixel];
+        crt += pixel % 40 >= X - 1 && pixel % 40 <= X + 1 ? "#" : ".";
+      }
+      console.log(crt);
     });
   });
 });
