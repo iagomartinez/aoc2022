@@ -1,5 +1,4 @@
-import { readInput } from "../../src/utils";
-import { Monkey, inspect } from "../../src/day11/day11";
+import { Monkey, inspect, inspectp2 } from "../../src/day11/day11";
 
 function createmonkeys(): Monkey[] {
   return [
@@ -68,7 +67,9 @@ describe("monkey parsing", () => {
 
 describe("Test case with 4 monkeys", () => {
   it("loops through the monkeys", () => {
-    const newmonkeys = inspect(createmonkeys(), 1);
+    const newmonkeys = inspect(createmonkeys(), 1, (item) =>
+      Math.floor(item / 3)
+    );
 
     expect(newmonkeys[0].items).toStrictEqual([20, 23, 27, 26]);
     expect(newmonkeys[1].items).toStrictEqual([2080, 25, 167, 207, 401, 1046]);
@@ -77,7 +78,9 @@ describe("Test case with 4 monkeys", () => {
   });
 
   it("items are correct after 20 turns", () => {
-    const newmonkeys = inspect(createmonkeys(), 20);
+    const newmonkeys = inspect(createmonkeys(), 20, (item) =>
+      Math.floor(item / 3)
+    );
 
     expect(newmonkeys[0].items).toStrictEqual([10, 12, 14, 26, 34]);
     expect(newmonkeys[1].items).toStrictEqual([245, 93, 53, 199, 115]);
@@ -85,11 +88,22 @@ describe("Test case with 4 monkeys", () => {
     expect(newmonkeys[3].items).toStrictEqual([]);
   });
 
-  it("finds correct value of monkey business", () => {
-    const newmonkeys = inspect(createmonkeys(), 20);
-    const sortedinspections = newmonkeys
-      .map((monkey) => monkey.inspections)
-      .sort((a, b) => b - a);
-    expect(sortedinspections.slice(0, 2)).toStrictEqual([105, 101]);
+  it("finds correct value of monkey business with different worrry fn", () => {
+    const expected = [99, 97, 8, 103];
+    let actionlog = `Starting analysis\n`;
+
+    const newmonkeys = inspectp2(
+      createmonkeys(),
+      20,
+      (item: number) => item % (23 * 19 * 13 * 17)
+    );
+    const inspections = newmonkeys.map((monkey) => monkey.inspections);
+    actionlog += newmonkeys.reduce(
+      (agg, monkey, id) => (agg += `Monkey ${id} holds ${monkey.items}; `),
+      ""
+    );
+    actionlog += "/n";
+    console.log(actionlog);
+    expect(inspections).toStrictEqual(expected);
   });
 });
